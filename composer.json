@@ -1,5 +1,5 @@
 {
-    "name": "frequence-web/contact-bundle",
+    "name": "success/contact-bundle",
     "type": "symfony-bundle",
     "description": "Event-based contact bundle",
     "keywords": ["contact", "bundle", "event"],
