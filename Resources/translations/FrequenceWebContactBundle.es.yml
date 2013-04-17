@@ -1,0 +1,9 @@
+contact:
+    submit:
+        button: Enviar
+        success: El mensaje ha sido enviado correctamente
+        failure: Tu mensaje no puede ser enviado porque contiene errores
+    message:
+        new: 'Nuevo mensaje de "%name%"'
+        sent:
+            you: envio un mensaje
