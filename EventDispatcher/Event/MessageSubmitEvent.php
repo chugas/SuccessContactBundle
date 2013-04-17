@@ -2,7 +2,6 @@
 
 namespace FrequenceWeb\Bundle\ContactBundle\EventDispatcher\Event;
 
-use FrequenceWeb\Bundle\ContactBundle\Model\Contact;
 use Symfony\Component\EventDispatcher\Event;
 
 /**
@@ -20,7 +19,7 @@ class MessageSubmitEvent extends Event
     /**
      * @param Contact $contact
      */
-    public function __construct(Contact $contact)
+    public function __construct($contact)
     {
         $this->contact = $contact;
     }
