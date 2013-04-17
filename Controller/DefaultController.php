@@ -25,7 +25,7 @@ class DefaultController extends ContainerAware
      */
     public function indexAction(Request $request)
     {
-        $this->container->get('session')->set('_fw_contact_referer', $request->getUri());
+        $this->container->get('session')->getFlashBag()->add('_fw_contact_referer', $request->getUri());
 
         return $this->renderFormResponse($this->getForm());
     }
@@ -49,18 +49,34 @@ class DefaultController extends ContainerAware
 
             // Let say the user it's ok
             $message = $this->container->get('translator')->trans('contact.submit.success', array(), 'FrequenceWebContactBundle');
-            $this->container->get('session')->getFlashBag()->add('success', $message);
+            $this->container->get('session')->getFlashBag()->add('success', $message); 
 
             // Redirect somewhere
-            return new RedirectResponse($this->container->get('session')->get('_fw_contact_referer'));
+            if ($request->isXmlHttpRequest()) {
+              
+              $return = json_encode(array("responseCode" => 200,  "response"=> 'OK'));
+              return new Response($return, 200, array('Content-Type'=>'application/json'));
+
+            }else{
+              $url = $this->container->get('session')->getFlashBag()->get('_fw_contact_referer');
+              return new RedirectResponse($url[0]);
+            }
         }
 
         // Let say the user there's a problem
         $message = $this->container->get('translator')->trans('contact.submit.failure', array(), 'FrequenceWebContactBundle');
-        $this->container->get('session')->getFlashBag()->add('error', $message);
+        $this->container->get('session')->getFlashBag()->add('error', $message); 
 
         // Errors ? Re-render the form
-        return $this->renderFormResponse($form);
+        if ($request->isXmlHttpRequest()) {
+
+          $return = json_encode(array("responseCode" => 400,  "response"=> 'ERROR', 'form' => $form->createView()));
+          return new Response($return, 200, array('Content-Type'=>'application/json'));
+
+        }else{
+          return $this->renderFormResponse($form);
+        }
+
     }
 
     /**
